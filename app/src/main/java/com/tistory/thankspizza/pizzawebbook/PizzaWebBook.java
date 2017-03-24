@@ -131,6 +131,7 @@ public class PizzaWebBook extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
+            callChrome("http://thankspizza.tistory.com");
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
             Toast.makeText(this, "불펜을 눌렀습니다.", Toast.LENGTH_SHORT).show();
@@ -254,9 +255,9 @@ public class PizzaWebBook extends AppCompatActivity
     private void saveFontSize100() {
         SharedPreferences pref = getSharedPreferences("Font_Size", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        int Font_Size = pref.getInt("Font_Size", 100);
         editor.putInt("Font_Size", 100);
         editor.apply();
+        int Font_Size = pref.getInt("Font_Size", 100);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setTextZoom(Font_Size);
         Toast.makeText(PizzaWebBook.this, "100 저장하기 : " + Font_Size, Toast.LENGTH_LONG).show();
