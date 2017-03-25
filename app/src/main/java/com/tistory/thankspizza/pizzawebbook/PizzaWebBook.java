@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,6 +34,13 @@ public class PizzaWebBook extends AppCompatActivity
 
     //jmkimz 4
     public String homeUrl = "file:///android_asset/index.html";
+    public String clienUrl = "http://m.clien.net/cs3/board?bo_style=lists&bo_table=park";
+    public String ppomppuUrl = "http://m.ppomppu.co.kr/new/bbs_list.php?id=climb";
+    public String mlbparkUrl = "http://mlbpark.donga.com/mp/b.php?b=bullpen";
+    public String thankspizzaUrl = "http://thankspizza.tistory.com";
+
+    //jmkimz 9
+    //public int Font_Size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +64,7 @@ public class PizzaWebBook extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //jmkimz 2
@@ -68,16 +74,16 @@ public class PizzaWebBook extends AppCompatActivity
         mWebView.getSettings().setBuiltInZoomControls(true);
         mWebView.getSettings().setDisplayZoomControls(false);
         mWebView.setWebViewClient(new PizzaWebViewClient());
+        mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        mWebView.getSettings().setUseWideViewPort(true);
         //jmkimz 2
+
         //jmkimz 3
         mWebView.setWebChromeClient(new FullscreenableChromeClient(this));
 
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setUseWideViewPort(true);
-        webSettings.setLoadWithOverviewMode(true);
-
         getFontSize();
     }
+
 
     //jmkimz 5
     private class PizzaWebViewClient extends WebViewClient {
@@ -118,6 +124,7 @@ public class PizzaWebBook extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this, "설정", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -130,24 +137,26 @@ public class PizzaWebBook extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            callChrome("http://thankspizza.tistory.com");
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-            Toast.makeText(this, "불펜을 눌렀습니다.", Toast.LENGTH_SHORT).show();
-            mWebView.loadUrl("http://mlbpark.donga.com/mp/b.php?b=bullpen");
-        } else if (id == R.id.nav_slideshow) {
-            getFontSize();
-
+        if (id == R.id.nav_thankspizza) {
+            callChrome(thankspizzaUrl);
+        } else if (id == R.id.nav_clien) {
+            goWebviewUrl(clienUrl);
+        } else if (id == R.id.nav_climb) {
+            goWebviewUrl(ppomppuUrl);
+        } else if (id == R.id.nav_bullpen) {
+            goWebviewUrl(mlbparkUrl);
+        } else  if (id == R.id.nav_camera) {
+            goWebviewUrl(homeUrl);
         } else if (id == R.id.nav_manage) {
-            saveFontSize120();
-
+            SharedPreferences pref = getSharedPreferences("Font_Size", MODE_PRIVATE);
+            int Font_Size = pref.getInt("Font_Size", 100);
+            if (Font_Size > 90) saveFontSize(Font_Size - 10);
         } else if (id == R.id.nav_share) {
-            saveFontSize150();
-
+            SharedPreferences pref = getSharedPreferences("Font_Size", MODE_PRIVATE);
+            int Font_Size = pref.getInt("Font_Size", 100);
+            if (Font_Size < 150) saveFontSize(Font_Size + 10);
         } else if (id == R.id.nav_send) {
-            saveFontSize100();
-
+            saveFontSize(100);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -159,7 +168,7 @@ public class PizzaWebBook extends AppCompatActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
-            if(FullscreenableChromeClient.isVideoFullscreen){ //전체화면에서 back 할 때 전체화면 종료 가능
+            if(FullscreenableChromeClient.isVideoFullscreen){ //jmkimz 전체화면에서 back 할 때 전체화면 종료 가능
                 return true;
             }
             mWebView.goBack();
@@ -224,42 +233,31 @@ public class PizzaWebBook extends AppCompatActivity
     private void getFontSize(){
         SharedPreferences pref = getSharedPreferences("Font_Size", MODE_PRIVATE);
         int Font_Size = pref.getInt("Font_Size", 100);
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setTextZoom(Font_Size);
+        mWebView.getSettings().setTextZoom(Font_Size);
         Toast.makeText(PizzaWebBook.this, "Font Size 불러오기 : " + Font_Size, Toast.LENGTH_LONG).show();
     }
-
-    // 값 저장하기
-    private void saveFontSize120() {
+    //jmkimz 8
+    //jmkimz 11
+    private void saveFontSize(int Font_Size) {
         SharedPreferences pref = getSharedPreferences("Font_Size", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("Font_Size", 120);
+        editor.putInt("Font_Size", Font_Size);
         editor.apply();
-        int Font_Size = pref.getInt("Font_Size", 100);
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setTextZoom(Font_Size);
-        Toast.makeText(PizzaWebBook.this, "120 저장하기 : " + Font_Size, Toast.LENGTH_LONG).show();
+        Font_Size = pref.getInt("Font_Size", 100);
+        mWebView.getSettings().setTextZoom(Font_Size);
+        Toast.makeText(PizzaWebBook.this, "저장하기 : " + Font_Size, Toast.LENGTH_LONG).show();
     }
-
-    private void saveFontSize150() {
-        SharedPreferences pref = getSharedPreferences("Font_Size", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("Font_Size", 150);
-        editor.apply();
-        int Font_Size = pref.getInt("Font_Size", 100);
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setTextZoom(Font_Size);
-        Toast.makeText(PizzaWebBook.this, "150 저장하기 : " + Font_Size, Toast.LENGTH_LONG).show();
-    }
-
-    private void saveFontSize100() {
-        SharedPreferences pref = getSharedPreferences("Font_Size", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("Font_Size", 100);
-        editor.apply();
-        int Font_Size = pref.getInt("Font_Size", 100);
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setTextZoom(Font_Size);
-        Toast.makeText(PizzaWebBook.this, "100 저장하기 : " + Font_Size, Toast.LENGTH_LONG).show();
+    //jmkimz 12
+    private void goWebviewUrl(String siteUrl) {
+        Toast.makeText(PizzaWebBook.this, siteUrl, Toast.LENGTH_SHORT).show();
+        mWebView.clearHistory();
+        if (siteUrl == homeUrl || siteUrl == thankspizzaUrl) {
+            mWebView.getSettings().setJavaScriptEnabled(true);
+            Toast.makeText(PizzaWebBook.this, "TRUE", Toast.LENGTH_SHORT).show();
+        } else {
+            mWebView.getSettings().setJavaScriptEnabled(false);
+            Toast.makeText(PizzaWebBook.this, "FALSE", Toast.LENGTH_SHORT).show();
+        }
+        mWebView.loadUrl(siteUrl);
     }
 }

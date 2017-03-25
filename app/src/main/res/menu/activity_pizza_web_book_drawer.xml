@@ -1,36 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:title="글자 크기 설정">
+        <menu>
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="작게" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="크게" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="기본 크기" />
+        </menu>
+    </item>
+
+    <item android:title="게시판">
+        <menu>
+            <item
+                android:id="@+id/nav_thankspizza"
+                android:icon="@drawable/ic_menu_send"
+                android:title="등산바이블" />
+            <item
+                android:id="@+id/nav_clien"
+                android:icon="@drawable/ic_menu_send"
+                android:title="클리앙" />
+            <item
+                android:id="@+id/nav_climb"
+                android:icon="@drawable/ic_menu_send"
+                android:title="등포" />
+            <item
+                android:id="@+id/nav_bullpen"
+                android:icon="@drawable/ic_menu_send"
+                android:title="불펜" />
+        </menu>
+    </item>
+
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="목차" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
 
 </menu>
