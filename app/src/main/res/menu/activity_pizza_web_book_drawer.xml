@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:title="글자 크기 설정">
         <menu>
-            <item
-                android:id="@+id/nav_manage"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="작게" />
+            <group android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@android:drawable/arrow_up_float"
                 android:title="크게" />
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="기본 크기" />
+                android:icon="@android:drawable/btn_default"
+                android:title="기본 크기"
+                app:actionViewClass="android.widget.TextView" />
+            <item
+            android:id="@+id/nav_manage"
+            android:icon="@android:drawable/arrow_down_float"
+            android:title="작게" />
+            </group>
         </menu>
     </item>
 
